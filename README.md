@@ -22,7 +22,7 @@ Après lecture du fichier dans le Notebook, nous obtenons un tableau Panda (4610
 
 ## Nettoyage du dataset
 
-**Suppression de certaines features**
+### Suppression de certaines features
 
 • “video_id_court” et “video_id” (pas d’intérêt car la ligne réfère déjà la vidéo en question)
 
