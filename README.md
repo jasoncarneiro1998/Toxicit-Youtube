@@ -19,3 +19,39 @@ Nous avons modifié légèrement le fichier Excel contenant l’ensemble des don
 • modification des virgules en points pour les flottants (nous aurions aussi pu utiliser le paramètre float = ’,’ dans python).
 
 Après lecture du fichier dans le Notebook, nous obtenons un tableau Panda (46102, 27) : 46102 lignes qui correspondent chacune à une vidéo youtube et 27 colonnes correspondant chacune à une feature.
+
+## Nettoyage du dataset
+
+**Suppression de certaines features**
+
+• “video_id_court” et “video_id” (pas d’intérêt car la ligne réfère déjà la vidéo en question)
+
+• “channel_id” (redondant avec “channel_name” car aucun doublon)
+
+• “X” (dernière colonne inutile) (enlevée directement dans le fichier Excel)
+
+**Valeurs manquantes**
+
+Vérification mais aucune valeur ne manquait.
+Il nous reste alors un Dataset (46102,23) avec donc 23 features.
+
+## Analyse des variables indépendamment les unes des autres
+
+**Variables quantitatives (20)**
+
+Après une rapide exploration des données, nous avons déterminé la variance (.var()) de l’ensemble des features quantitatives (celles qui ne correspondent pas aux catégories).
+Nous pouvons remarquer que certaines variables ont une variance très faible notamment: nbrMotInsulteMoyenne, nbrMotAllongMoyenne, nbrMotMAJMoyenne, nbrExclMarkMoyenne.
+En faisant une boîte à moustache pour analyser la distribution de ces variables, on voit que la plupart des données ont une valeur entre 0 et 1 pour ces colonnes. On voit aussi qu’il existe beaucoup de valeurs extrêmes.
+En utilisant la commande pour déterminer le nombre d’outliers, on voit par exemple que pour la variable nbrMotInsulteMoyenne, la proportion d’outliers représente 15%. Nous ne pouvons donc pas les supprimer du dataset.
+Si nous nous intéressons à présent à ces mêmes variables en ne considérons plus leurs moyennes mais seulement leur quantité à travers les features: nbrMotInsulte, nbrMotAllong, nbrMotMAJ, nbrExclMark, nbrQuestMark. Ces quantités seules ne sont pas exploitables car elles dépendent du nombre de commentaires de la vidéo, du nombre de mots par commentaire.
+
+**Catégorisation des vidéos**
+
+Le dataset permet de catégoriser les vidéos en 3 types de catégories:
+• categorie_new : “Coeur”, “Niche” ou “Partisans qui réfèrent au type de débat que suscite la vidéo.
+• categ_inst: presse nationale, presse régionale, presse magazine, alternatif, TV et presse uniquement sur le web qui réfèrent au type de média de la vidéo.
+• channel_name qui réfère le nom de la chaîne, ainsi toutes les vidéos d’une même chaîne sont reconnaissables.
+En traçant la répartition de chacune de ces catégorisations, on peut observer :
+• pour channel_name: 5 chaînes youtube représentent à elles seules 60% du dataset (un approfondissement de l’étude pourrait être axé sur un élargissement du dataset en termes de chaînes youtube)
+• pour categ_inst:
+• pour categorie_new:
