@@ -111,3 +111,82 @@ Nous avons également réalisé un modèle de deep learning, pour ce faire il a 
 Une fois notre modèle entraîné et évalué, nous l’avons testé en créant 3 instances, le modèle est censé prédire le nombre d’insultes cependant il retourne trois fois le même résultat alors qu’il ne devrait pas (puisque les test sont totalement différents). Nous n’avons pas réussi à comprendre pourquoi notre modèle de deep Learning n’étais pas précis, il faudrait peut-être augmenter le nombre d’epochs (mais nous somme limité avec nos ordinateurs portables), changer le learning rate, ajouter du dropout ou choisir un autre optimizer plus adapté à notre Loss.
 
 Pour conclure, si nous devons choisir un modèle pour prédire le nombre d'insultes, nous choisirons la méthode de stacking car c’est le modèle qui a le meilleur score sans over-fitting.
+
+# Création d’un indice de toxicité et classification
+
+L’objectif est de créer une nouvelle variable, à partir des variables de départ, qui est plus représentative du caractère toxique d’une vidéo.
+
+Notre méthode consiste à calculer un score qui représente un degré de toxicité. Plus le score est élevé, plus la vidéo est toxique. Puis, ce score prend la forme d’une variable catégorielle : toxicité faible/moyenne/forte.
+
+## Définir les variables de départ
+
+Il s’agit, tout d’abord, de définir à partir de quelles variables de départ le score va être calculé. Le choix de ces variables est mené en se posant la question suivante : “Est-ce que cette variable nous permet de dire si une vidéo est toxique ?” Si non, on la supprime. Si oui, on la garde et on se demande: ”Si l’on combine cette variable avec une
+autre variable, la variable obtenue sera-t-elle plus représentative de la toxicité ?” Si non, on garde la variable de base. Si oui, on prend la nouvelle variable obtenue.
+
+Prenons pour commencer le nombre de mots d’insultes. Plus il y a d’insultes, plus on peut considérer qu’une vidéo est toxique. Donc, cette variable permet de dire si une vidéo est toxique ou non. Cependant, il est plus pertinent d’obtenir un pourcentage de mots d’insultes par rapport au nombre de mots total en-dessous d’une vidéo. En effet, par exemple, s’il y a trois mots d’insultes dans l’ensemble des commentaires et que le nombre de mots est peu élevé, nous considérons la vidéo comme toxique. Or, si le nombre de mots très grand devant trois, nous considérerons que la vidéo n’est pas toxique. Nous gardons donc la variable “Pourcentage de mots d’insultes” qui correspond à “nbrMotInsulte/nbrMot” qui est plus représentative de la toxicité d’une vidéo. On effectue exactement le même raisonnement pour les variables nbrMotAllong, nbrMotMAJ, nbrQuestMark et nbrExclMark. Nous gardons donc les variables suivantes :
+
+• nbrMotAllong/nbrMot
+
+• nbrMotMAJ/nbrMot
+
+• nbrQuestMark/nbrMot
+
+• nbrExclMark/nbrMot
+
+Nous gardons les variables suivantes telles quelles car elles sont significatives pour estimer la toxicité d’une vidéo et en les combinant à une autre variable, nous n’obtenons pas de variables plus représentatives:
+
+• nbrMotInsulteMoyenne
+
+• nbrMotAllongMoyenne
+
+• nbrMotMAJMoyenne
+
+• nbrQuestMarkMoyenne
+
+• nbrExclMarkMoyenne
+
+Pour les variables “discussion_count” et “comment_count”, nous considérons qu’il est plus pertinent de les comparer à “message_count”, car à nouveau cela dépend du nombre de commentaires au total. Plus il y a de fils de discussion et de réponses à des commentaires, plus cela signifie qu’il y a débat et donc potentiellement davantage de toxicité. Ainsi, nous retenons les variables suivantes :
+
+• discussion_count/message_count
+
+• comment_count/message_count
+
+Pour la variable “viewCount” soit le nombre de vues d’une vidéo, nous estimons qu’il est plus pertinent de la comparer à “subscriberCount” car si une vidéo a un nombre de vues grand devant le nombre de personnes qui suivent la chaîne, la vidéo est susceptible d’avoir “créé le buzz” et donc d’avoir davantage de commentaires toxiques. Nous retenons donc la variable : “viewCount/subscriberCount”.
+
+Pour les variables “channel_name”, “categ_inst, “categorie_new”, nous pensons qu’elles peuvent influer sur la toxicité. En effet, par exemple, certains journaux sont plus polémiques et peuvent donc être sujets à davantage de toxicité car qui dit polémique dit débat. Cependant, nous n’arrivons pas à définir une méthode pour dire si une chaîne est toxique ou non. On aurait pu faire des statistiques descriptives et trouver quelle chaîne est la plus toxique selon ce datasat. Cependant, cela n’aurait pas pu permettre de généraliser cette information. De plus, notre modèle ne sera peut-être pas capable de prédire la toxicité d’une vidéo dont la chaîne n’est pas présente dans le datasat. Ainsi, pour toutes ces raisons, nous avons décidé de ne pas utiliser ces variables pour le calcul du score de la toxicité.
+
+Toutes les autres variables sont supprimées car nous considérons qu’elles ne nous permettent pas de dire si une vidéo est toxique ou non à partir de ces variables.
+
+## Définir une méthode de calcul du score de toxicité
+
+Il s’agit maintenant de définir une méthode de calcul du score en fonction des variables choisies. Pour cela, nous avons accordé un coefficient de pondération à chaque variable choisie dans la partie précédente en fonction de l’importance de cette variable, selon nous, pour évaluer la toxicité d’une vidéo. Nous sommes tout à fait conscients que ces coefficients sont très subjectifs et dépendent de notre appréciation. Il faudrait se baser sur une étude sociologique et linguistique par exemple afin de déterminer ces coefficients de pondération.
+
+Voici le tableau avec les coefficients de pondération associés à chaque variable :
+
+Nom de la variable                             Coefficient de pondération
+
+nbrMotInsulte/nbrMot                                        5
+
+nbrMotAllong/nbrMot                                         2
+
+nbrMotMAJ/nbrMot                                            3
+
+nbrQuestMark/nbrMot                                         1
+
+nbrExclMark/nbrMot                                          2
+
+nbrMotInsulteMoyenne                                        5
+
+nbrExclMarkMoyenne                                          2
+
+nbrQuestMarkMoyenne                                         1
+
+nbrMotMAJMoyenne                                            3
+
+nbrMotAllongMoyenne                                         2
+
+discussion_count/message_count                              4
+
+comment_count/message_count                                 4
+
+viewCount/subscriberCount                                   3
