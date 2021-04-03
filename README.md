@@ -30,14 +30,14 @@ Après lecture du fichier dans le Notebook, nous obtenons un tableau Panda (4610
 
 • “X” (dernière colonne inutile) (enlevée directement dans le fichier Excel)
 
-**Valeurs manquantes**
+### Valeurs manquantes
 
 Vérification mais aucune valeur ne manquait.
 Il nous reste alors un Dataset (46102,23) avec donc 23 features.
 
 ## Analyse des variables indépendamment les unes des autres
 
-**Variables quantitatives (20)**
+### Variables quantitatives (20)
 
 Après une rapide exploration des données, nous avons déterminé la variance (.var()) de l’ensemble des features quantitatives (celles qui ne correspondent pas aux catégories).
 Nous pouvons remarquer que certaines variables ont une variance très faible notamment: nbrMotInsulteMoyenne, nbrMotAllongMoyenne, nbrMotMAJMoyenne, nbrExclMarkMoyenne.
@@ -45,7 +45,7 @@ En faisant une boîte à moustache pour analyser la distribution de ces variable
 En utilisant la commande pour déterminer le nombre d’outliers, on voit par exemple que pour la variable nbrMotInsulteMoyenne, la proportion d’outliers représente 15%. Nous ne pouvons donc pas les supprimer du dataset.
 Si nous nous intéressons à présent à ces mêmes variables en ne considérons plus leurs moyennes mais seulement leur quantité à travers les features: nbrMotInsulte, nbrMotAllong, nbrMotMAJ, nbrExclMark, nbrQuestMark. Ces quantités seules ne sont pas exploitables car elles dépendent du nombre de commentaires de la vidéo, du nombre de mots par commentaire.
 
-**Catégorisation des vidéos**
+### Catégorisation des vidéos
 
 Le dataset permet de catégoriser les vidéos en 3 types de catégories:
 
@@ -59,6 +59,24 @@ En traçant la répartition de chacune de ces catégorisations, on peut observer
 
 • pour channel_name: 5 chaînes youtube représentent à elles seules 60% du dataset (un approfondissement de l’étude pourrait être axé sur un élargissement du dataset en termes de chaînes youtube)
 
-• pour categ_inst:
+## Comparaison des variables entre elles
 
-• pour categorie_new:
+### Corrélation
+
+Afin de comparer l’ensemble des variables entre elles, nous avons tracé la matrice de corrélation du dataset ainsi que des diagrammes par paire pour chaque couple de variable. Nous avons pu mettre en couleur chacune des catégories, notamment categorie_new qui nous a particulièrement intéressé car il n’y avait que 3 types de valeurs possibles.
+
+Le “pairplot” nous permet d’avoir une vue générale des données. On peut voir que les graphes se ressemblent beaucoup entre eux et que les points sont très condensés.
+De nombreuses variables sont corrélées (coefficient de corrélation supérieur à 0.9) notamment le nombre de commentateurs uniques qui est corrélé avec le nombre de commentaires total et le nombre d’utilisateurs dont les commentaires sont likés (0.97 et 0.96 respectivement).
+
+### Outliers
+
+Ces diagrammes par paires montrent encore beaucoup de valeurs extrêmes dans tout le dataset et pour n’importe quelle feature. Ces outliers sont en grande proportion, environ 15% du dataset pour chaque catégorie. Nous ne pouvons donc pas décider de les supprimer, les conséquences seraient trop importantes pour la qualité de notre dataset.
+
+## Encodage des variables non quantifiées
+
+Afin d’avoir un tableau de données entièrement quantifié (seulement avec des nombres), nous avions plusieurs possibilités pour encoder les variables non quantifiées.
+Au départ nous avons opté pour un encodage assez simple en associant un chiffre à chaque valeur différente de la variable catégorie. Par exemple pour categorie_new, à "Coeur" on associait 1, “Niche” 2 et “Partisan” 3.
+
+Nous avons finalement opté pour un autre type d’encodage qui permet des calculs plus rapides par la suite. Pour chaque valeur différente de la variable catégorie, une nouvelle variable est créée valant 1 si la vidéo appartient à cette catégorie, 0 sinon. Ainsi pour une variable catégorie comprenant au départ 3 valeurs différentes, 3 variables sont créées valant chacune 0 ou 1.
+
+Cette méthode permet ensuite de s’adapter à une plus grande base de données car après avoir trouvé notre modèle nous pourrons le tester avec des vidéos qui n’entrent pas dans les catégories initiales, notamment des vidéos dont la chaîne Youtube n’est pas encore présente dans le dataset.
