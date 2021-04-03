@@ -48,10 +48,17 @@ Si nous nous intéressons à présent à ces mêmes variables en ne considérons
 **Catégorisation des vidéos**
 
 Le dataset permet de catégoriser les vidéos en 3 types de catégories:
+
 • categorie_new : “Coeur”, “Niche” ou “Partisans qui réfèrent au type de débat que suscite la vidéo.
+
 • categ_inst: presse nationale, presse régionale, presse magazine, alternatif, TV et presse uniquement sur le web qui réfèrent au type de média de la vidéo.
+
 • channel_name qui réfère le nom de la chaîne, ainsi toutes les vidéos d’une même chaîne sont reconnaissables.
+
 En traçant la répartition de chacune de ces catégorisations, on peut observer :
+
 • pour channel_name: 5 chaînes youtube représentent à elles seules 60% du dataset (un approfondissement de l’étude pourrait être axé sur un élargissement du dataset en termes de chaînes youtube)
+
 • pour categ_inst:
+
 • pour categorie_new:
