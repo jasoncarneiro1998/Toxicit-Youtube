@@ -14,6 +14,8 @@ indice de toxicité afin de pouvoir classer chaque vidéo Youtube en un certain 
 Nous avons modifié légèrement le fichier Excel contenant l’ensemble des données afin de faciliter sa lecture sur le Notebook:
 
 • modifications des caractères spéciaux comme les accents (ex: Libération → Liberation) ;
+
+
 • modification des virgules en points pour les flottants (nous aurions aussi pu utiliser le paramètre float = ’,’ dans python).
 
 Après lecture du fichier dans le Notebook, nous obtenons un tableau Panda (46102, 27) : 46102 lignes qui correspondent chacune à une vidéo youtube et 27 colonnes correspondant chacune à une feature.
