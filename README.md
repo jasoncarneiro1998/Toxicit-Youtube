@@ -217,8 +217,11 @@ Nous avons donc utilisé la même méthodologie que pour le dataset précédent 
 # Conclusion
 
 Ainsi, notre challenge s’est déroulé en trois parties distinctes.
+
 Tout d’abord nous avons analysé les données afin d’en comprendre le sens. Nous avons essayé de mettre en lumière d’éventuels liens entre les variables, de les trier en fonction de leur importance, et de les recoder à notre convenance. 
+
 Dans un second temps, une fois nos données prêtes à être exploitées, nous avons formulé le problème sous la forme d’une régression afin de prédire la variable “nbrMotInsulte”. Nous avons effectué un benchmark de diverses méthodes. La méthode du stacking nous a assuré un score de 0.75. 
+
 Enfin, dans une partie plus libre, dans laquelle nous avons créer une variable “toxicité” qui évalue à quel point une vidéo est “toxique”. Nous avons opté pour une variable catégorielle avec
 quatre classes (peu toxique/assez toxique/toxique/très toxique). Pour arriver à cela nous avons attribué un score de toxicité pour chaque variable et nous les avons pondérés selon l’impact dans la toxicité. Il en découle un score de toxicité qui permettra de catégoriser les vidéos selon les classes mentionnées précédemment. Nous avons ensuite testé un dataset modifié (avec des variables ajustées) et le dataset initial (obtenu à l’issu de la première partie). Nous avons obtenu de bons résultats dans les deux cas ce qui nous permet de dire que la modélisation adoptée est efficace.
 
