@@ -163,11 +163,11 @@ Il s’agit maintenant de définir une méthode de calcul du score en fonction d
 
 Voici le tableau avec les coefficients de pondération associés à chaque variable :
 
-Nom de la variable-                             Coefficient de pondération
+Nom de la variable -                             Coefficient de pondération
 
-nbrMotInsulte/nbrMot-                                        5
+nbrMotInsulte/nbrMot -                                        5
 
-nbrMotAllong/nbrMot-                                         2
+nbrMotAllong/nbrMot -                                         2
 
 nbrMotMAJ/nbrMot   -                                         3
 
@@ -185,8 +185,37 @@ nbrMotMAJMoyenne         -                                   3
 
 nbrMotAllongMoyenne       -                                  2
 
-discussion_count/message_count-                              4
+discussion_count/message_count -                              4
 
 comment_count/message_count    -                             4
 
 viewCount/subscriberCount       -                            3
+
+
+Les valeurs de chaque variable sont ensuite réparties en trois groupes de valeurs. Les valeurs inférieures à (max(variable) - min(variable))/3 sont dans le 1er groupe et sont remplacées par la valeur 1, les valeurs comprises entre (max(variable) - min(variable))/3 et 2*(max(variable) - min(variable))/3 sont dans le 2ème groupe et sont remplacées par la valeur 2. Enfin, les valeurs supérieurs à 2*(max(variable) - min(variable))/3 sont dans le 2ème groupe et sont remplacées par la valeur 3.
+
+Pour finir, le score de toxicité d’une vidéo est calculé en faisant la somme de chaque variable multipliée par son coefficient de pondération.
+
+## Définir la variable catégorielle en fonction du score
+
+Enfin, on définit la variable catégorielle finale en fonction du score. Pour cela, on trace la distribution du score grâce à la fonction “distplot”. On peut remarquer que quatre groupes se distinguent clairement. Ainsi, si le score est inférieur à 40, on considère que la vidéo est peu toxique, si le score est compris entre 40 et 44 , on considère que la vidéo est assez toxique. Si le score est compris entre 44 et 48, la vidéo est toxique. Enfin, si le score est supérieur à 48, on considère que la vidéo est très toxique.
+
+## Entrainement des modèles sur la dataframe
+
+En prenant la dataframe initiale composée des valeurs flottantes des nouvelles variables que nous avons créé, on ajoute la colonne de la variable ‘toxic’. On teste plusieurs modèles de classification: arbre de décision, KNeighbors, supor vector machine, Random Forest, la régression logistique et le Gradient Boosting.
+
+Après un premier entraînement des modèles, nous pouvons garder seulement les modèles suivants car leur score est supérieur à 0.99: Decision Tree, Random Forest et Gradient Boosting.
+
+En les analysant plus profondément, nous constatons que les modèles Decision Tree et Random Forest sont en overfitting, c’est-à-dire que l'entraînement ne reflète pas la réalité, en effet la courbe d'entraînement ne converge pas vers celle de test.
+Nous tentons donc d’améliorer le Gradient Boosting afin qu’il soit plus performant. Cependant en essayant de l’améliorer, le score n’est pas meilleur.
+
+Nous pouvons alors tenter de complexifier notre dataset en reprenant le dataframe initiale avec l’ensemble des catégories comme lors de la partie II.
+Cependant au lieu de suivre le même raisonnement, essayons de réaliser un apprentissage non supervisé pour que notre modèle trouve lui-même différentes classes. Nous avons utilisé la méthode des Kmeans et tenté d’interpréter les résultats obtenus. En effet, notre modèle a défini des classes mais à quoi correspondent-elles ? En affichant la proportion des classes pour chaque variable nous avons essayé de les interpréter mais c’est impossible car il y a beaucoup de variables et les graphiques se ressemblent beaucoup.
+
+Nous avons donc utilisé la même méthodologie que pour le dataset précédent puis nous avons réitéré les méthodes de classification opérées ci-dessus sur le dataframe initial afin de vérifier que les modifications apportées au jeu de données n’ont pas simplifié le problème. On obtient de bons scores de modélisation, ainsi qu’une bonne précision, recall et F1-score, similaires à ceux obtenus plus haut, ce qui nous conforte dans l’idée que la modélisation de la toxicité est efficace.
+
+# Conclusion
+
+Ainsi, notre challenge s’est déroulé en trois parties distinctes. Tout d’abord nous avons analysé les données afin d’en comprendre le sens. Nous avons essayé de mettre en lumière d’éventuels liens entre les variables, de les trier en fonction de leur importance, et de les recoder à notre convenance. Dans un second temps, une fois nos données prêtes à être exploitées, nous avons formulé le problème sous la forme d’une régression afin de prédire la variable “nbrMotInsulte”. Nous avons effectué un benchmark de diverses méthodes. La méthode du stacking nous a assuré un score de 0.75. Enfin, dans une partie plus libre, il nous a été demandé de créer une variable “toxicité” qui évalue à quel point une vidéo est “toxique”. Nous avons opté pour une variable catégorielle avec
+quatre classes (peu toxique/assez toxique/toxique/très toxique). Pour arriver à cela nous avons attribué un score de toxicité pour chaque variable et nous les avons pondérés selon l’impact dans la toxicité. Il en découle un score de toxicité qui permettra de catégoriser les vidéos selon les classes mentionnées précédemment. Nous avons ensuite testé un dataset modifié (avec des variables ajustées) et le dataset initial (obtenu à l’issu de la première partie). Nous avons obtenu de bons résultats dans les deux cas ce qui nous permet de dire que la modélisation adoptée est efficace.
+Face aux bons résultats obtenus, nous pouvons pensé que la méthode de calcul du score de toxicité est peut-être trop simple. De même, on peut imaginer des pistes afin de complexifier le modèle en élargissant l’échantillon de vidéo, en diversifiant l’origine de ces dernières notamment.
