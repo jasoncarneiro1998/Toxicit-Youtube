@@ -163,30 +163,30 @@ Il s’agit maintenant de définir une méthode de calcul du score en fonction d
 
 Voici le tableau avec les coefficients de pondération associés à chaque variable :
 
-Nom de la variable                             Coefficient de pondération
+Nom de la variable-                             Coefficient de pondération
 
-nbrMotInsulte/nbrMot                                        5
+nbrMotInsulte/nbrMot-                                        5
 
-nbrMotAllong/nbrMot                                         2
+nbrMotAllong/nbrMot-                                         2
 
-nbrMotMAJ/nbrMot                                            3
+nbrMotMAJ/nbrMot   -                                         3
 
-nbrQuestMark/nbrMot                                         1
+nbrQuestMark/nbrMot -                                        1
 
-nbrExclMark/nbrMot                                          2
+nbrExclMark/nbrMot   -                                       2
 
-nbrMotInsulteMoyenne                                        5
+nbrMotInsulteMoyenne  -                                      5
 
-nbrExclMarkMoyenne                                          2
+nbrExclMarkMoyenne     -                                     2
 
-nbrQuestMarkMoyenne                                         1
+nbrQuestMarkMoyenne     -                                    1
 
-nbrMotMAJMoyenne                                            3
+nbrMotMAJMoyenne         -                                   3
 
-nbrMotAllongMoyenne                                         2
+nbrMotAllongMoyenne       -                                  2
 
-discussion_count/message_count                              4
+discussion_count/message_count-                              4
 
-comment_count/message_count                                 4
+comment_count/message_count    -                             4
 
-viewCount/subscriberCount                                   3
+viewCount/subscriberCount       -                            3
